@@ -5,7 +5,8 @@ name = "pypi"
 
 [packages]
 speechrecognition = "*"
-pyaudio = "0.2.11"
+pyaudio = "*"
+pocketsphinx = "*"
 
 [dev-packages]
 

@@ -37,10 +37,21 @@ python dependencies.
 $ pipenv install
 ```
 
-**NOTE:** You may have to install `pocketsphinx` and `pyaudio` outside of pipenv using:
+### Troubleshooting Installation
+
+You may have to install and `pyaudio` outside of pipenv using if `pipenv install` fails for any reason. Sometimes pyaudio complains about missing
+C files. Use the command below to install pyaudio into your virtual env outside of pipenv.
+
 ```shell
 
 $ pip install --global-option='build_ext' --global-option='-I/usr/local/include' --global-option='-L/usr/local/lib' pyaudio
+```
+
+You may also run into issues installing `pocketsphinx` like: `fatal error: 'al.h' file not found` if you are running on MacOS Big Sur (catalina seems to be fine).
+This snippet installs from a fork of the project with a patch for MacOS Big Sur:
+
+```shell
+$ pip3 install git+https://github.com/Im-Fran/pocketsphinx-python
 ```
 
 ## Running the tests

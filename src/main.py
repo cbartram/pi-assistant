@@ -1,4 +1,5 @@
 import time
+from src.log import logger
 import speech_recognition as sr
 
 r = sr.Recognizer()
@@ -15,27 +16,28 @@ def callback(recognizer, audio):
 
     try:
         speech_as_text = recognizer.recognize_sphinx(audio, keyword_entries=keywords)
-        print(speech_as_text)
+        logger.info(speech_as_text)
 
         # Look for your "Ok Google" keyword in speech_as_text
         if "google" in speech_as_text or "hey google":
             recognize_main()
 
     except sr.UnknownValueError as e:
-        print(f"Oops! Didn't catch that word or phrase. Error = {str(e)}")
+        logger.error(f"The word or phrase was not a recognized keyword. Recognized keywords are: {keywords}")
 
 
 def recognize_main():
-    print("Recognizing Main phrase...")
+    logger.info("Listening for primary command...")
     audio = r.listen(source)
     try:
         output = r.recognize_google(audio_data=audio)
-        print(output)
+        logger.info(f"Sending command to Wit.ai: \"{output}\"")
     except sr.UnknownValueError as e:
-        print(f"There was an error while attempting to transcribe the audio. Message = {str(e)}")
+        logger.error(f"There was an error while attempting to transcribe the audio. Message = {str(e)}")
 
 
 def start_recognizer():
+    logger.info("Listening for input keywords...")
     r.listen_in_background(source, callback)
     time.sleep(1000000)
 
