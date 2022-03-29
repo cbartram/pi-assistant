@@ -7,6 +7,10 @@ name = "pypi"
 speechrecognition = "*"
 pyaudio = "*"
 pocketsphinx = "*"
+wit = "*"
+playsound = "*"
+gtts = "*"
+pyobjc = "*"
 
 [dev-packages]
 
