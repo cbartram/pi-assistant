@@ -11,7 +11,7 @@ class PluginManager:
     """
 
     def __init__(self, config: Configuration = Configuration()):
-        self._plugins = PluginManager.load_plugins()
+        self._plugins = []
         self._initialized_plugins = []
         self._config = config
 
@@ -20,6 +20,7 @@ class PluginManager:
         Initializes each plugin class and calls the "init" method of each plugin
         :return:
         """
+        self._plugins = PluginManager.load_plugins()
         initialized_plugins = []
         for plugin in self._plugins:
             p = plugin()

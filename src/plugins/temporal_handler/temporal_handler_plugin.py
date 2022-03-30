@@ -1,9 +1,9 @@
 from datetime import datetime
-from src.pi_assistant import assistant_reply
 from src.plugins.plugin import Plugin
+from src.pi_assistant import assistant_reply
 
 
-class TimePlugin(Plugin):
+class TemporalHandlerPlugin(Plugin):
     """
     This plugin tells the user the current time in their timezone.
     """
