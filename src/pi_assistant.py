@@ -47,7 +47,7 @@ def assistant_reply(text: str):
 
 
 # Called from the background thread
-def callback(recognizer, audio):
+def callback(recognizer: sr.Recognizer, audio: sr.AudioData) -> None:
     try:
         kw = config.get("voice_assistant.keywords")
         keywords = []
@@ -67,7 +67,7 @@ def callback(recognizer, audio):
         # logger.debug(f"The word or phrase was not a recognized keyword. Recognized keywords are: {keywords}")
 
 
-def recognize_main():
+def recognize_main() -> None:
     logger.info("Listening for primary command...")
     audio = recognizer.listen(source)
     try:
