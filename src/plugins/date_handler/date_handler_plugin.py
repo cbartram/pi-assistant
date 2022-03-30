@@ -8,7 +8,7 @@ class DateHandlerPlugin(Plugin):
     This plugin tells the user the current month and day of the month.
     """
     def bind_to(self) -> str:
-        return "date_helper"
+        return "date"
 
     def init(self) -> None:
         pass

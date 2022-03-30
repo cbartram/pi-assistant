@@ -1,6 +1,6 @@
 import os
-
 import src.plugins.plugin
+from src.log import logger
 from src.config import Configuration
 from src.util import sanitize_plugin_class_name
 
@@ -38,7 +38,9 @@ class PluginManager:
         if intent.lower() not in self._config.get("wit.intents"):
             raise KeyError(f'The intent specified: {intent} is not a known intent: {self._config.get("wit.intents")}')
 
+        logger.info(f"Looking for plugin bound to intent: {intent}")
         for plugin in self._initialized_plugins:
+            logger.info(f"Plugin: {plugin.__class__} is bound to: {plugin.bind_to()}",)
             if plugin.bind_to() == intent:
                 return plugin
         return None
@@ -54,6 +56,7 @@ class PluginManager:
 
         sorted_intents = sorted(wit_response['intents'], key=lambda intent: intent['confidence'])
         for intent in sorted_intents:
+            logger.info(f"Intent: {intent}")
             plugin = self.get_bound_plugin_for(intent['name'])
             plugin.on_intent_received(intent)
             plugin.on_plugin_end()
