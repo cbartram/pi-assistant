@@ -1,5 +1,4 @@
 import os
-import time
 import socket
 from wit import Wit
 from gtts import gTTS
@@ -7,14 +6,20 @@ from src.log import logger
 from datetime import datetime
 from playsound import playsound
 import speech_recognition as sr
+from src.config import Configuration
 
+
+config = Configuration()
+source = sr.Microphone()
 r = sr.Recognizer()
 
-# Words that sphinx should listen closely for. 0-1 is the sensitivity
-# of the wake word.
-keywords = [("google", 1), ("hey google", 1),  ("ok google", 1)]
-
-source = sr.Microphone()
+def get_keywords():
+    kw = config.get("voice_assistant.keywords")
+    result = []
+    for k in kw:
+        print(k)
+        result.append((k['text'], k['sensitivity']))
+    return result
 
 
 def speak(text: str):
@@ -28,7 +33,7 @@ def speak(text: str):
 # Called from the background thread
 def callback(recognizer, audio):
     try:
-        speech_as_text = recognizer.recognize_sphinx(audio, keyword_entries=keywords)
+        speech_as_text = recognizer.recognize_sphinx(audio, keyword_entries=get_keywords())
 
         # Look for your "Ok Google" keyword in speech_as_text
         if "google" in speech_as_text or "hey google":

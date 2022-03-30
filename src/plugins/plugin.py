@@ -14,6 +14,22 @@ class Plugin(ABC):
         lighting it should return a string "smart_lights" which will match the intent defined in Wit.ai. This tells
         the system that whenever the smart_lights intent is observed for an utterance this logic should execute.
 
-        :return: String the name of the wi
+        :return: String the name of the wit.ai intent to bind to
         """
+        pass
 
+    @abstractmethod
+    def init(self) -> None:
+        """
+        Executes when the plugin is first loaded and can be used to set initial variables or settings.
+        :return:
+        """
+        pass
+
+    @abstractmethod
+    def on_intent_received(self) -> None:
+        """
+        Executes when a new intent is processed by Wit.ai and is ready for an IoT action to be take as a result.
+        :return:
+        """
+        pass

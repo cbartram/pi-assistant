@@ -7,3 +7,9 @@ voice_assistant:
         sensitivity: 1
       - text: "google"
         sensitivity: 1
+
+wit:
+  intents:
+    - "date"
+    - "time"
+    - "wit/cancel"

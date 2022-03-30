@@ -13,7 +13,8 @@ class Configuration:
         # Always load application.yml as the default configuration but if additional env specific
         # configuration is present it should overwrite values specified in application.yml
         try:
-            with open(os.path.join('resources', 'application.yml'), 'r') as file:
+            print()
+            with open(os.path.join('.', 'resources', 'application.yml'), 'r') as file:
                 self._yaml_config = yaml.safe_load(file)
         except Exception as e:
             logger.error(f"Exception thrown while attempting to load application.yaml configuration properties. Error = {str(e)}")
@@ -46,12 +47,12 @@ class Configuration:
                 if k in self._yaml_config:
                     data = self._yaml_config[k]
                 else:
-                    raise KeyError(f"The key part: {k} from the given key: {key} does not exist in the configuration.")
+                    raise KeyError(f"The key part: {k} from the given key: {key} does not exist in the configuration. Config = {self._yaml_config}")
             else:
                 if k in data:
                     data = data[k]
                 else:
-                    raise KeyError(f"The key part: {k} from the given key: {key} does not exist in the configuration.")
+                    raise KeyError(f"The key part: {k} from the given key: {key} does not exist in the configuration. Config = {data}")
         return data
 
     def get_environment(self):
