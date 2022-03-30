@@ -12,6 +12,7 @@ playsound = "*"
 gtts = "*"
 pyobjc = "*"
 pyyaml = "*"
+requests = "*"
 
 [dev-packages]
 pytest = "*"

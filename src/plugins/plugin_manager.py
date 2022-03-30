@@ -12,6 +12,7 @@ class PluginManager:
 
     def __init__(self, config: Configuration = Configuration()):
         self._plugins = []
+        self._configs = {}  # The configuration for each respective plugin
         self._initialized_plugins = []
         self._config = config
 
@@ -21,6 +22,7 @@ class PluginManager:
         :return:
         """
         self._plugins = PluginManager.load_plugins()
+        self._configs = PluginManager.load_config()
         initialized_plugins = []
         for plugin in self._plugins:
             p = plugin()
@@ -58,8 +60,12 @@ class PluginManager:
         for intent in sorted_intents:
             logger.info(f"Intent: {intent}")
             plugin = self.get_bound_plugin_for(intent['name'])
-            plugin.on_intent_received(intent)
-            plugin.on_plugin_end()
+            try:
+                plugin.on_intent_received(intent)
+                plugin.on_plugin_end()
+            except Exception as e:
+                logger.error(f"Exception thrown while attempting to run the plugin: {plugin.__class__} with intent: {intent}. "
+                             f"Error Message = {str(e)}")
 
     @staticmethod
     def load_plugins() -> list:
@@ -76,6 +82,27 @@ class PluginManager:
             mod = __import__(f'src.plugins.{plugin_name}.{plugin_name}_plugin', fromlist=[class_name])
             plugins.append(getattr(mod, class_name))
         return plugins
+
+    @staticmethod
+    def load_config() -> dict:
+        """
+        Loads all the configuration objects for the each plugin. If the plugin does not define a configuration class
+        it is omitted.
+        :return: dictionary of configuration classes keyed by the plugin name
+        """
+        configs = {}
+        path = os.path.join(".", "src", "plugins")
+        module_names = list(filter(lambda directory: directory != '__pycache__', next(os.walk(path))[1]))
+
+        for module in module_names:
+            config_class_name = sanitize_plugin_class_name(module, True)
+            config_file_path = os.path.join(path, module, f"{module}_config.py")
+            if os.path.exists(config_file_path):
+                mod = __import__(f'src.plugins.{module}.{module}_config', fromlist=[config_class_name])
+                configs[module] = getattr(mod, config_class_name)
+            else:
+                logger.debug(f"No configuration file found for plugin: {module} in path: {config_file_path}")
+        return configs
 
     @property
     def plugins(self) -> list:

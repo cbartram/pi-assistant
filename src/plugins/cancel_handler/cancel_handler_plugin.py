@@ -1,5 +1,6 @@
 from src.plugins.plugin import Plugin
 from src.pi_assistant import assistant_reply
+from src.plugins.plugin_configuration import PluginConfiguration
 
 
 class CancelHandlerPlugin(Plugin):
@@ -10,7 +11,7 @@ class CancelHandlerPlugin(Plugin):
     def bind_to(self) -> str:
         return "wit$cancel"
 
-    def init(self) -> None:
+    def init(self, config: PluginConfiguration = None) -> None:
         pass
 
     def on_intent_received(self, intent: dict) -> None:

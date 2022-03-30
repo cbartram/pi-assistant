@@ -1,3 +1,4 @@
+from src.plugins.plugin_configuration import PluginConfiguration
 from abc import ABC, abstractmethod
 
 
@@ -19,7 +20,7 @@ class Plugin(ABC):
         pass
 
     @abstractmethod
-    def init(self) -> None:
+    def init(self, config: PluginConfiguration = None) -> None:
         """
         Executes when the plugin is first loaded and can be used to set initial variables or settings.
         :return:

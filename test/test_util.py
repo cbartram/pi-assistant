@@ -11,3 +11,7 @@ def test_sanitize_plugin_class_name_with_underscore():
 
 def test_sanitize_plugin_class_name_with_null_value():
     assert sanitize_plugin_class_name(None) == ""
+
+
+def test_sanitize_plugin_class_name_with_config_value():
+    assert sanitize_plugin_class_name("more_complex_plugin", True) == "MoreComplexPluginConfig"

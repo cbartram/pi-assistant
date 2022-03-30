@@ -1,11 +1,12 @@
 from src.plugins.plugin import Plugin
+from src.plugins.plugin_configuration import PluginConfiguration
 
 
 class HueSmartLightsPlugin(Plugin):
     def bind_to(self) -> str:
         return "hue_smart_lights"
 
-    def init(self) -> None:
+    def init(self, config: PluginConfiguration = None) -> None:
         pass
 
     def on_intent_received(self, intent: dict) -> None:

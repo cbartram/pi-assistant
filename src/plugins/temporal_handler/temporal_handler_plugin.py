@@ -1,6 +1,7 @@
 from datetime import datetime
 from src.plugins.plugin import Plugin
 from src.pi_assistant import assistant_reply
+from src.plugins.plugin_configuration import PluginConfiguration
 
 
 class TemporalHandlerPlugin(Plugin):
@@ -10,7 +11,7 @@ class TemporalHandlerPlugin(Plugin):
     def bind_to(self) -> str:
         return "time"
 
-    def init(self) -> None:
+    def init(self, config: PluginConfiguration = None) -> None:
         pass
 
     def on_intent_received(self, intent: dict) -> None:
