@@ -1,0 +1,9 @@
+
+voice_assistant:
+    keywords:
+      - text: "hey google"
+        sensitivity: 1
+      - text: "ok google"
+        sensitivity: 1
+      - text: "google"
+        sensitivity: 1
