@@ -5,7 +5,13 @@ A raspberry pi based smart home voice controlled assistant.
 
 Requirements for the software and other tools to build, test and push 
 - [Python 3.9](https://www.python.org)
-- [Example 2](https://www.example.com)
+- [Pipenv](https://pipenv.pypa.io/en/latest/)
+
+Use `pipenv install` to install the necessary dependencies and then activate the virtual environment using:
+
+```shell
+$ source $(pipenv --venv)/bin/activate
+```
 
 ## Installation
 
@@ -54,9 +60,13 @@ This snippet installs from a fork of the project with a patch for MacOS Big Sur:
 $ pip3 install git+https://github.com/Im-Fran/pocketsphinx-python
 ```
 
-## Running the tests
+## Running Unit Tests
 
-Coming Soon
+Unit tests are managed through `pytest` and can be run by simply running the command:
+
+```shell
+$ pytest
+```
 
 ### Style test
 

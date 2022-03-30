@@ -22,17 +22,17 @@ def speak(text: str):
     tts.save('voice.mp3')
     playsound('voice.mp3')
     # Remove the file when
-    # os.unlink('voice.mp3')
+    os.unlink('voice.mp3')
 
 
 # Called from the background thread
 def callback(recognizer, audio):
     try:
         speech_as_text = recognizer.recognize_sphinx(audio, keyword_entries=keywords)
-        logger.info(speech_as_text)
 
         # Look for your "Ok Google" keyword in speech_as_text
         if "google" in speech_as_text or "hey google":
+            logger.info(f"Found keyword in audio: \"{speech_as_text}\". Listening for primary directive.")
             speak("im listening")
             recognize_main()
 
