@@ -60,6 +60,33 @@ This snippet installs from a fork of the project with a patch for MacOS Big Sur:
 $ pip3 install git+https://github.com/Im-Fran/pocketsphinx-python
 ```
 
+## Running 
+
+You can run this on any machine with a speaker and a microphone by using:
+
+```shell
+export ENVIRONMENT=prod
+export WIT_ACCESS_TOKEN=<your wit.ai access token for your app>
+python3 -m src.pi_assistant
+```
+
+Make sure you add various utterances to your [Wit.ai](https://wit.ai) account and tie the utterances to specific intents within the Wit
+console. Once you have created your list of intents add them to `application.yml` like: 
+
+```shell
+wit:
+  intents:
+    - "date"
+    - "time"
+    - "whatever_your_intent_is_called"
+```
+
+The plugins currently added to this repository expect that within your [Wit.ai](https://wit.ai) account you have utterances and intents for:
+
+- date
+- time
+- wit$cancel
+
 ## Running Unit Tests
 
 Unit tests are managed through `pytest` and can be run by simply running the command:
