@@ -8,7 +8,7 @@ class WeatherPlugin(Plugin):
     def init(self) -> None:
         pass
 
-    def on_intent_received(self) -> None:
+    def on_intent_received(self, intent: dict) -> None:
         pass
 
     def on_plugin_end(self) -> None:
