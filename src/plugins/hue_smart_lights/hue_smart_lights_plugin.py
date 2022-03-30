@@ -6,6 +6,9 @@ class HueSmartLightsPlugin(Plugin):
     def bind_to(self) -> str:
         return "hue_smart_lights"
 
+    def name(self):
+        return "hue_smart_lights"
+
     def init(self, config: PluginConfiguration = None) -> None:
         pass
 

@@ -8,6 +8,9 @@ class TemporalHandlerPlugin(Plugin):
     """
     This plugin tells the user the current time in their timezone.
     """
+    def name(self):
+        return "temporal_handler"
+
     def bind_to(self) -> str:
         return "time"
 

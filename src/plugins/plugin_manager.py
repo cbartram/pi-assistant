@@ -26,7 +26,12 @@ class PluginManager:
         initialized_plugins = []
         for plugin in self._plugins:
             p = plugin()
-            p.init()
+
+            # IMPORTANT: Plugin's name() method must return the same string case-sensitive as the module for which
+            # the plugin is enclosed. self._configs is keyed by the module's name NOT the plugin's name() method. If
+            # these mis-match there will be an initialized plugin without any injected configuration
+            if p.name() in self._configs:
+                p.init(config=self._configs[p.name()]())
             initialized_plugins.append(p)
 
         self._initialized_plugins = initialized_plugins
@@ -81,6 +86,7 @@ class PluginManager:
             class_name = sanitize_plugin_class_name(plugin_name)
             mod = __import__(f'src.plugins.{plugin_name}.{plugin_name}_plugin', fromlist=[class_name])
             plugins.append(getattr(mod, class_name))
+        logger.info(f"Successfully loaded: {len(plugins)} plugins.")
         return plugins
 
     @staticmethod
@@ -102,6 +108,8 @@ class PluginManager:
                 configs[module] = getattr(mod, config_class_name)
             else:
                 logger.debug(f"No configuration file found for plugin: {module} in path: {config_file_path}")
+        logger.info(f"Successfully loaded: {len(configs.keys())} configuration modules.")
+        logger.debug(f"Configuration object keys: {configs.keys()}")
         return configs
 
     @property

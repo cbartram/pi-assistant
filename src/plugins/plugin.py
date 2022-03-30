@@ -9,6 +9,15 @@ class Plugin(ABC):
     """
 
     @abstractmethod
+    def name(self):
+        """
+        Defines a unique name for this plugin. This should be the same as the module (package) name this plugin
+        is enclosed in. I.e for package: weather with weather_plugin.py the name should be "weather"
+        :return:
+        """
+        pass
+
+    @abstractmethod
     def bind_to(self) -> str:
         """
         Determines the intent to which the given plugin will be bound to. For example if the plugin is for Smart home
