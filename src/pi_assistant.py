@@ -7,9 +7,11 @@ from datetime import datetime
 from playsound import playsound
 import speech_recognition as sr
 from src.config import Configuration
+from src.plugins.plugin_manager import PluginManager
 
 
 config = Configuration()
+plugin_manager = PluginManager()
 source = sr.Microphone()
 r = sr.Recognizer()
 

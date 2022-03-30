@@ -33,3 +33,11 @@ class Plugin(ABC):
         :return:
         """
         pass
+
+    @abstractmethod
+    def on_plugin_end(self) -> None:
+        """
+        Executes after the command has been process by this plugin and can close any open files or dispose of
+        any outstanding resources.
+        :return:
+        """

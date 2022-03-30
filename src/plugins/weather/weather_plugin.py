@@ -10,3 +10,6 @@ class WeatherPlugin(Plugin):
 
     def on_intent_received(self) -> None:
         pass
+
+    def on_plugin_end(self) -> None:
+        pass
