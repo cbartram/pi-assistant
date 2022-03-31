@@ -18,10 +18,16 @@ class FeitElectricSmartLightsPlugin(Plugin):
             light.set_version(3.3)
             self._lights.append(light)
 
-
-
     def on_intent_received(self, intent: dict, entities: dict) -> None:
-        print(intent)
+        light_state_value = entities['light_state:light_state'][0]['value']
+
+        # TODO We need a notion of grouping items together so we can put the light_location entity into play here
+        if light_state_value.lower() == "on":
+            for light in self._lights:
+                light.turn_on()
+        else:
+            for light in self._lights:
+                light.turn_off()
 
     def on_plugin_end(self) -> None:
         pass

@@ -73,12 +73,13 @@ class PluginManager:
             logger.info(f"Intent: {intent}")
             plugin = self.get_bound_plugin_for(intent['name'])
             try:
-                plugin.on_intent_received(intent, intent['entities'])
+                plugin.on_intent_received(intent, wit_response['entities'])
                 plugin.on_plugin_end()
                 return plugin
             except Exception as e:
                 logger.error(f"Exception thrown while attempting to run the plugin: {plugin.__class__} with intent: {intent}. "
                              f"Error Message = {str(e)}")
+                raise e
                 return None
 
     @staticmethod
