@@ -16,6 +16,7 @@ requests = "*"
 
 [dev-packages]
 pytest = "*"
+toml = "*"
 
 [requires]
 python_version = "3.9"
