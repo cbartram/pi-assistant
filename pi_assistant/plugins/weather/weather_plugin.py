@@ -6,10 +6,14 @@ from pi_assistant.plugins.plugin_configuration import PluginConfiguration
 
 
 class WeatherPlugin(Plugin):
+    """
+    Uses the user's local position (city and region only) to determine
+    the current weather forecast and temperature.
+    """
     def __init__(self):
         self._config = None
-        self._current_city = None
-        self._current_state = None
+        self._city = None
+        self._region = None
         self._current_temperature_f = None  # Temperature in farenheight
         self._feels_like_temperature_f = None
         self._forecast = None  # Cloudy, Rainy, Sunny
@@ -22,14 +26,14 @@ class WeatherPlugin(Plugin):
 
     def init(self, config: PluginConfiguration = None) -> None:
         self._config = config
-        city, region = self.get_location()
+        self._city, self._region = self.get_location()
         self._forecast, self._current_temperature_f, self._feels_like_temperature_f = \
-            self.get_weather_report(city, region)
+            self.get_weather_report(self._city, self._region)
 
     def on_intent_received(self, intent: dict) -> None:
         # TODO how often should we re-fetch weather? Implement that logic somewhere so the cache in init() doesn't go stale
         # maybe if feels_like > or < 20º difference from temp include it in the assistant response else exclude it since user didn't ask for it
-        assistant_reply(f"It is currently {self._forecast} in {self._current_city} {self._current_state}. The temperature is {self._current_temperature_f} and it feels like {self._feels_like_temperature_f}")
+        assistant_reply(f"It is currently {self._forecast} in {self._city} {self._region}. The temperature is {self._current_temperature_f} and it feels like {self._feels_like_temperature_f}")
 
     def on_plugin_end(self) -> None:
         pass
