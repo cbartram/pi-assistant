@@ -15,3 +15,4 @@ wit:
     - "time"
     - "wit$cancel"
     - "wit$get_weather"
+    - "feit_smart_lights"

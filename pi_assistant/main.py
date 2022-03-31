@@ -18,9 +18,11 @@ def run():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.bind(("127.0.0.1", 65432))
         s.listen()
+        logger.info(f"Initializing {len(plugin_manager.plugins)} plugins.")
         plugin_manager.init_plugins()
         recognizer.listen_in_background(source, callback)
         logger.info("Listening for input keywords...")
+        assistant_reply("I am ready to help!")
         conn, addr = s.accept()
         with conn:
             while True:

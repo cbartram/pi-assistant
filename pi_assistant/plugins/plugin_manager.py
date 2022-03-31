@@ -30,9 +30,12 @@ class PluginManager:
             # IMPORTANT: Plugin's name() method must return the same string case-sensitive as the module for which
             # the plugin is enclosed. self._configs is keyed by the module's name NOT the plugin's name() method. If
             # these mismatch there will be an initialized plugin without any injected configuration
-            if p.name() in self._configs:
-                p.init(config=self._configs[p.name()]())
-            initialized_plugins.append(p)
+            if p.enabled():
+                if p.name() in self._configs:
+                    p.init(config=self._configs[p.name()]())
+                initialized_plugins.append(p)
+            else:
+                logger.info(f"The plugin: {p.name()} is disabled skipping initialization.")
 
         self._initialized_plugins = initialized_plugins
 

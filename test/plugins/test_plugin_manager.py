@@ -1,5 +1,6 @@
 from unittest import mock
 from pi_assistant.plugins.plugin_manager import PluginManager
+from pi_assistant.plugins.weather.weather_plugin import WeatherPlugin
 from pi_assistant.plugins.date_handler.date_handler_plugin import DateHandlerPlugin
 from pi_assistant.plugins.temporal_handler.temporal_handler_plugin import TemporalHandlerPlugin
 
@@ -20,7 +21,8 @@ def test_plugin_manager_loads_plugin_config_success():
 
 # Need to mock the init method of the weather plugin because it makes API calls
 @mock.patch('pi_assistant.plugins.weather.weather_plugin.WeatherPlugin.init', side_effect=lambda config: config)
-def test_plugin_manager_init_initializes_plugins_success(mocked_init):
+@mock.patch('pi_assistant.plugins.feit_electric_smart_lights.feit_electric_smart_lights_plugin.FeitElectricSmartLightsPlugin.enabled', side_effect=lambda: False)
+def test_plugin_manager_init_initializes_plugins_success(mocked_init, mock_feit):
     plugin_manger = PluginManager()
     plugin_manger.init_plugins()
     assert type(plugin_manger._initialized_plugins) == list
@@ -30,14 +32,24 @@ def test_plugin_manager_init_initializes_plugins_success(mocked_init):
             name = base.__name__
             assert name == 'Plugin'
 
-    assert len(plugin_manger._initialized_plugins) == len(plugin_manger.plugins)
+    assert len(plugin_manger._initialized_plugins) == len(plugin_manger.plugins) - 2
+
+
+@mock.patch('pi_assistant.plugins.weather.weather_plugin.WeatherPlugin.enabled', side_effect=lambda: False)
+@mock.patch('pi_assistant.plugins.feit_electric_smart_lights.feit_electric_smart_lights_plugin.FeitElectricSmartLightsPlugin.enabled', side_effect=lambda: False)
+def test_plugin_manager_init_initializes_plugins_skips_disabled_plugins(mocked_init, mock_feit):
+    plugin_manger = PluginManager()
+    total_plugins = len(plugin_manger.load_plugins())
+    plugin_manger.init_plugins()
+    assert len(plugin_manger._initialized_plugins) == (total_plugins - 2)
 
 
 @mock.patch('pi_assistant.plugins.weather.weather_plugin.WeatherPlugin.init', side_effect=lambda config: config)
-def test_plugin_manager_gets_bound_plugin_for_intent(mocked_init):
+@mock.patch('pi_assistant.plugins.feit_electric_smart_lights.feit_electric_smart_lights_plugin.FeitElectricSmartLightsPlugin.enabled', side_effect=lambda: False)
+def test_plugin_manager_gets_bound_plugin_for_intent(mocked_init, mock_feit):
     plugin_manger = PluginManager()
     plugin_manger.init_plugins()
-    assert len(plugin_manger._initialized_plugins) == len(plugin_manger.plugins)
+    assert len(plugin_manger._initialized_plugins) == len(plugin_manger.plugins) - 2
 
     time_plugin = plugin_manger.get_bound_plugin_for("time")
     date_plugin = plugin_manger.get_bound_plugin_for("date")
@@ -58,7 +70,8 @@ def test_plugin_manager_gets_bound_plugin_for_throws_error_invalid_intent():
 # Must mock the assistant reply function so that it doesn't inadvertently speak a reply during tests
 @mock.patch('pi_assistant.main.assistant_reply', side_effect=lambda text: text)
 @mock.patch('pi_assistant.plugins.weather.weather_plugin.WeatherPlugin.init', side_effect=lambda config: config)
-def test_plugin_manager_handle_intent_success(side_effect, assistant_reply):
+@mock.patch('pi_assistant.plugins.feit_electric_smart_lights.feit_electric_smart_lights_plugin.FeitElectricSmartLightsPlugin.enabled', side_effect=lambda: False)
+def test_plugin_manager_handle_intent_success(side_effect, assistant_reply, mock_feit):
     plugin_manger = PluginManager()
     plugin_manger.init_plugins()
 
@@ -75,7 +88,8 @@ def test_plugin_manager_handle_intent_success(side_effect, assistant_reply):
 
 
 @mock.patch('pi_assistant.plugins.weather.weather_plugin.WeatherPlugin.init', side_effect=lambda config: config)
-def test_plugin_manager_handle_intent_no_intents_error(side_effect):
+@mock.patch('pi_assistant.plugins.feit_electric_smart_lights.feit_electric_smart_lights_plugin.FeitElectricSmartLightsPlugin.enabled', side_effect=lambda: False)
+def test_plugin_manager_handle_intent_no_intents_error(side_effect, mock_feit):
     plugin_manger = PluginManager()
     plugin_manger.init_plugins()
 

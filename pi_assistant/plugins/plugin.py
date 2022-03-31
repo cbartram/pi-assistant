@@ -8,14 +8,22 @@ class Plugin(ABC):
     actions for a given intent.
     """
 
-    @abstractmethod
     def name(self):
         """
         Defines a unique name for this plugin. This should be the same as the module (package) name this plugin
         is enclosed in. I.e for package: weather with weather_plugin.py the name should be "weather"
         :return:
         """
-        pass
+        return self.__module__.split(".")[-2]
+
+    def enabled(self) -> bool:
+        """
+        Determines if the plugin is enabled and should be used to respond to Wit.ai (user) intents. If this value
+        is set to false the plugin will not be loaded and assistant functionality provided by the plugin will not be
+        enabled. The default value for any plugin is true.
+        :return: True if the plugin should be enabled and false otherwise.
+        """
+        return True
 
     @abstractmethod
     def bind_to(self) -> str:

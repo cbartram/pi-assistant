@@ -13,6 +13,7 @@ gtts = "*"
 pyobjc = "*"
 pyyaml = "*"
 requests = "*"
+tinytuya = "*"
 
 [dev-packages]
 pytest = "*"

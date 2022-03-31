@@ -18,8 +18,8 @@ class WeatherPlugin(Plugin):
         self._feels_like_temperature_f = None
         self._forecast = None  # Cloudy, Rainy, Sunny
 
-    def name(self):
-        return "weather"
+    def enabled(self) -> bool:
+        return False
 
     def bind_to(self) -> str:
         return "wit$get_weather"
