@@ -1,6 +1,5 @@
 from unittest import mock
 from pi_assistant.plugins.plugin_manager import PluginManager
-from pi_assistant.plugins.weather.weather_plugin import WeatherPlugin
 from pi_assistant.plugins.date_handler.date_handler_plugin import DateHandlerPlugin
 from pi_assistant.plugins.temporal_handler.temporal_handler_plugin import TemporalHandlerPlugin
 

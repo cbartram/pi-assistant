@@ -25,17 +25,20 @@ class PluginManager:
         self._configs = PluginManager.load_config()
         initialized_plugins = []
         for plugin in self._plugins:
-            p = plugin()
+            try:
+                p = plugin()
 
-            # IMPORTANT: Plugin's name() method must return the same string case-sensitive as the module for which
-            # the plugin is enclosed. self._configs is keyed by the module's name NOT the plugin's name() method. If
-            # these mismatch there will be an initialized plugin without any injected configuration
-            if p.enabled():
-                if p.name() in self._configs:
-                    p.init(config=self._configs[p.name()]())
-                initialized_plugins.append(p)
-            else:
-                logger.info(f"The plugin: {p.name()} is disabled skipping initialization.")
+                # IMPORTANT: Plugin's name() method must return the same string case-sensitive as the module for which
+                # the plugin is enclosed. self._configs is keyed by the module's name NOT the plugin's name() method. If
+                # these mismatch there will be an initialized plugin without any injected configuration
+                if p.enabled():
+                    if p.name() in self._configs:
+                        p.init(config=self._configs[p.name()]())
+                    initialized_plugins.append(p)
+                else:
+                    logger.info(f"The plugin: {p.name()} is disabled skipping initialization.")
+            except Exception as e:
+                logger.error()
 
         self._initialized_plugins = initialized_plugins
 
