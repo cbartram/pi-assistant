@@ -9,7 +9,7 @@ class HueSmartLightsPlugin(Plugin):
     def init(self, config: PluginConfiguration = None) -> None:
         pass
 
-    def on_intent_received(self, intent: dict) -> None:
+    def on_intent_received(self, intent: dict, entities: dict) -> None:
         pass
 
     def on_plugin_end(self) -> None:

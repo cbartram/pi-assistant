@@ -45,7 +45,7 @@ class Plugin(ABC):
         pass
 
     @abstractmethod
-    def on_intent_received(self, intent: dict) -> None:
+    def on_intent_received(self, intent: dict, entities: dict) -> None:
         """
         Executes when a new intent is processed by Wit.ai and is ready for an IoT action to be take as a result.
         :return:

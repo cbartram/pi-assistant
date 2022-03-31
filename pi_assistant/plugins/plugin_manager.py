@@ -67,12 +67,13 @@ class PluginManager:
         if len(wit_response['intents']) == 0:
             raise Exception("Uncategorizable utterance did not match any intents.")
 
+        logger.info(f"Wit.ai Response: {wit_response}")
         sorted_intents = sorted(wit_response['intents'], key=lambda i: i['confidence'], reverse=True)
         for intent in sorted_intents:
             logger.info(f"Intent: {intent}")
             plugin = self.get_bound_plugin_for(intent['name'])
             try:
-                plugin.on_intent_received(intent)
+                plugin.on_intent_received(intent, intent['entities'])
                 plugin.on_plugin_end()
                 return plugin
             except Exception as e:

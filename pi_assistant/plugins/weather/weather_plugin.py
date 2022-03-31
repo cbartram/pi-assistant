@@ -30,7 +30,7 @@ class WeatherPlugin(Plugin):
         self._forecast, self._current_temperature_f, self._feels_like_temperature_f = \
             self.get_weather_report(self._city, self._region)
 
-    def on_intent_received(self, intent: dict) -> None:
+    def on_intent_received(self, intent: dict, entities: dict) -> None:
         # TODO how often should we re-fetch weather? Implement that logic somewhere so the cache in init() doesn't go stale
         # maybe if feels_like > or < 20º difference from temp include it in the assistant response else exclude it since user didn't ask for it
         assistant_reply(f"It is currently {self._forecast} in {self._city} {self._region}. The temperature is {self._current_temperature_f} and it feels like {self._feels_like_temperature_f}")

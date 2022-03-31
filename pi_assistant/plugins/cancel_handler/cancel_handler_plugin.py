@@ -14,7 +14,7 @@ class CancelHandlerPlugin(Plugin):
     def init(self, config: PluginConfiguration = None) -> None:
         pass
 
-    def on_intent_received(self, intent: dict) -> None:
+    def on_intent_received(self, intent: dict, entities: dict) -> None:
         assistant_reply("Okay I will be here if you need anything.")
 
     def on_plugin_end(self) -> None:

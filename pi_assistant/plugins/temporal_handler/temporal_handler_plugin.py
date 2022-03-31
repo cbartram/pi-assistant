@@ -14,7 +14,7 @@ class TemporalHandlerPlugin(Plugin):
     def init(self, config: PluginConfiguration = None) -> None:
         pass
 
-    def on_intent_received(self, intent: dict) -> None:
+    def on_intent_received(self, intent: dict, entities: dict) -> None:
         assistant_reply("The current time is " + datetime.now().strftime("%I:%M %p"))
 
     def on_plugin_end(self) -> None:
