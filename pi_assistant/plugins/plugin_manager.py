@@ -52,7 +52,7 @@ class PluginManager:
                 return plugin
         return None
 
-    def handle_intent(self, wit_response: dict) -> None:
+    def handle_intent(self, wit_response: dict) -> pi_assistant.plugins.plugin.Plugin:
         """
         Handles an intent by locating a plugin which matches the given intent and running the plugin.
         :param wit_response: Dictionary the response returned from the wit client.
@@ -61,16 +61,18 @@ class PluginManager:
         if len(wit_response['intents']) == 0:
             raise Exception("Uncategorizable utterance did not match any intents.")
 
-        sorted_intents = sorted(wit_response['intents'], key=lambda i: i['confidence'])
+        sorted_intents = sorted(wit_response['intents'], key=lambda i: i['confidence'], reverse=True)
         for intent in sorted_intents:
             logger.info(f"Intent: {intent}")
             plugin = self.get_bound_plugin_for(intent['name'])
             try:
                 plugin.on_intent_received(intent)
                 plugin.on_plugin_end()
+                return plugin
             except Exception as e:
                 logger.error(f"Exception thrown while attempting to run the plugin: {plugin.__class__} with intent: {intent}. "
                              f"Error Message = {str(e)}")
+                return None
 
     @staticmethod
     def load_plugins() -> list:

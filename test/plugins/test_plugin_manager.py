@@ -55,19 +55,23 @@ def test_plugin_manager_gets_bound_plugin_for_throws_error_invalid_intent():
         assert "The intent specified: not_a_real_wit_intent is not a known intent:" in str(e)
 
 
+# Must mock the assistant reply function so that it doesn't inadvertently speak a reply during tests
+@mock.patch('pi_assistant.main.assistant_reply', side_effect=lambda text: text)
 @mock.patch('pi_assistant.plugins.weather.weather_plugin.WeatherPlugin.init', side_effect=lambda config: config)
-def test_plugin_manager_handle_intent_success(side_effect):
+def test_plugin_manager_handle_intent_success(side_effect, assistant_reply):
     plugin_manger = PluginManager()
     plugin_manger.init_plugins()
 
     intents = {
         'intents': [
-            {'id': '5013819665334140', 'name': 'time', 'confidence': 0.9933}, # It will execute the time intent because it has the highest confidence
+            # It will execute the time intent because it has the highest confidence
+            {'id': '5013819665334140', 'name': 'time', 'confidence': 0.9933},
             {'id': '5013819665334140', 'name': 'date', 'confidence': 0.9831}
         ]
     }
 
-    plugin_manger.handle_intent(intents)
+    plugin = plugin_manger.handle_intent(intents)
+    assert type(plugin) == TemporalHandlerPlugin
 
 
 @mock.patch('pi_assistant.plugins.weather.weather_plugin.WeatherPlugin.init', side_effect=lambda config: config)
@@ -76,7 +80,7 @@ def test_plugin_manager_handle_intent_no_intents_error(side_effect):
     plugin_manger.init_plugins()
 
     intents = {
-        'intents': [] # No intents cause an error
+        'intents': []  # No intents cause an error
     }
 
     try:
