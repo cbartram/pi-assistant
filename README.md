@@ -1,5 +1,7 @@
 # pi-assistant
-A raspberry pi based smart home voice controlled assistant.
+
+A raspberry pi based smart home voice controlled assistant which can do things like get the time and date, find the weather,
+play songs on Spotify, and control your home lighting!
 
 ## Prerequisites
 
@@ -15,25 +17,36 @@ $ source $(pipenv --venv)/bin/activate
 
 ## Installation
 
-You will need to install both `swig` and `portaudio` outside of pip before using this software. This software requires
-python version 3.9 which will automatically be installed in a virtual environment when you install with [Pipenv](https://pipenv.pypa.io/en/latest/).
+You will need to install `pocketsphinx`, `swig` and `portaudio` outside of pip before using this software. Pocketsphinx is used as a locally run NLP
+solution which transcibes audio files to text. This is important because pi-assistant listens to all audio in the background waiting 
+for your configured key words (think "hey google", or "alexa"). Instead of using a costly cloud service to process all audio (even when the user isn't directly speaking
+to pi-assistant) pocketsphinx can do the audio transcription for free! 
+
+Once the keyword is detected pi-assistant will then leverage the cloud service to do audio transcription because its faster and we know for a fact
+we want to audio to be processed.
+
+This software requires python version 3.9 which will automatically be installed in a virtual environment when you install with [Pipenv](https://pipenv.pypa.io/en/latest/).
 
 ### Linux
 
-Run apt-get on linux to install swig and portaudio
+Run apt-get on linux to install pocketsphinx, swig, and portaudio:
 
 ````shell
-apt-get install swig
-apt-get install portaudio
+$ apt-get install swig
+$ apt-get install portaudio
+$ apt-get install pocketsphinx 
 ````
 
 ### MacOS
 
-You can install swig and portaudio using [HomeBrew](https://brew.sh).
+You can install pocketsphinx, swig, and portaudio using [HomeBrew](https://brew.sh).
 
 ```shell
 $ brew install swig
-$ brew install portaudio 
+$ brew install portaudio
+
+# Only install pocketsphinx with brew if it fails to install with pipenv
+$ brew install pocketsphinx
 ```
 
 Once you have installed swig and portaudio you can use [Pipenv](https://pipenv.pypa.io/en/latest/) to install the other
@@ -67,7 +80,18 @@ You can run this on any machine with a speaker and a microphone by using:
 ```shell
 export ENVIRONMENT=prod
 export WIT_ACCESS_TOKEN=<your wit.ai access token for your app>
-python3 -m src.pi_assistant
+
+# This is only necessary if you plan to use the "weather" plugin/intent which is disabled by default
+export OPEN_WEATHER_API_KEY=<your openweathermap.com API key>
+
+
+python3 -m pi_assistant.main
+
+# Now use the configured keyword to invoke the assistant try:
+# "Hey google" then pause for a second while PocketSphinx processes the text 
+# and then ask "what time is it?"
+# pi-assistant should give you the current time!
+
 ```
 
 Make sure you add various utterances to your [Wit.ai](https://wit.ai) account and tie the utterances to specific intents within the Wit
@@ -78,6 +102,8 @@ wit:
   intents:
     - "date"
     - "time"
+    - "wit$cancel"
+    - "wit$get_weather"
     - "whatever_your_intent_is_called"
 ```
 
@@ -92,7 +118,7 @@ The plugins currently added to this repository expect that within your [Wit.ai](
 Unit tests are managed through `pytest` and can be run by simply running the command:
 
 ```shell
-$ pytest
+$ python3 -m pytest ./test -v
 ```
 
 ### Style test
