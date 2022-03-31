@@ -14,3 +14,4 @@ wit:
     - "date"
     - "time"
     - "wit$cancel"
+    - "wit$get_weather"

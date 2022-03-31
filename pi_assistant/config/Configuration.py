@@ -1,6 +1,6 @@
 import os
 import yaml
-from src.log import logger
+from pi_assistant.log import logger
 
 
 class Configuration:

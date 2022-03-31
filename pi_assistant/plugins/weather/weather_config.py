@@ -1,5 +1,5 @@
 import os
-from src.plugins.plugin_configuration import PluginConfiguration
+from pi_assistant.plugins.plugin_configuration import PluginConfiguration
 
 
 class WeatherConfig(PluginConfiguration):

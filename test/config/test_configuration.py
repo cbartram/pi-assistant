@@ -1,5 +1,5 @@
 import pytest
-from src.config import Configuration
+from pi_assistant.config import Configuration
 
 
 def test_configuration_load_application_default_values_correctly():

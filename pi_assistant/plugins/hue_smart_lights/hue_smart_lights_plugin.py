@@ -1,5 +1,5 @@
-from src.plugins.plugin import Plugin
-from src.plugins.plugin_configuration import PluginConfiguration
+from pi_assistant.plugins.plugin import Plugin
+from pi_assistant.plugins.plugin_configuration import PluginConfiguration
 
 
 class HueSmartLightsPlugin(Plugin):

@@ -1,4 +1,4 @@
-from src.util import sanitize_plugin_class_name
+from pi_assistant.util import sanitize_plugin_class_name
 
 
 def test_sanitize_plugin_class_name_success():

@@ -1,7 +1,7 @@
 from datetime import datetime
-from src.plugins.plugin import Plugin
-from src.pi_assistant import assistant_reply
-from src.plugins.plugin_configuration import PluginConfiguration
+from pi_assistant.plugins.plugin import Plugin
+from pi_assistant.main import assistant_reply
+from pi_assistant.plugins.plugin_configuration import PluginConfiguration
 
 
 class TemporalHandlerPlugin(Plugin):

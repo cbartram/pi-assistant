@@ -2,11 +2,11 @@ import os
 import socket
 from wit import Wit
 from gtts import gTTS
-from src.log import logger
+from pi_assistant.log import logger
 from playsound import playsound
 import speech_recognition as sr
-from src.config import Configuration
-from src.plugins.plugin_manager import PluginManager
+from pi_assistant.config import Configuration
+from pi_assistant.plugins.plugin_manager import PluginManager
 
 config = Configuration()
 recognizer = sr.Recognizer()
