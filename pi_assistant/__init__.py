@@ -22,9 +22,9 @@ def main():
         "profile:update": "",
         "profile:delete": "",
         "room:create": create_room,
-        "room:delete": "",
+        "room:delete": delete_room,
         "group:create": create_group,
-        "group:delete": "",
+        "group:delete": delete_group,
     }
     parser = argparse.ArgumentParser(description='Pi Assistant - Smart Home Assistant')
     parser.add_argument('command', type=str, help='A required string positional argument'
@@ -46,6 +46,11 @@ def main():
 
 
 def run(args) -> None:
+    """
+    Runs the primary assistant program and starts listening via the Microphone.
+    :param: args:
+    :return:
+    """
     if args.profile:
         profile = Profile().load_json_file(os.path.join(".", "resources", "profile", args.profile + ".json"))
         start_assistant(profile)
@@ -62,7 +67,8 @@ def create_profile(args) -> None:
     """
     if not args.name:
         raise Exception("The --name argument must be specified when creating a new profile.")
-    profile = Profile(name=args.name)
+    profile = Profile()
+    profile.name = args.name
     profile.save()
     logger.info(f"Successfully created the new profile: {args.name}!")
 
@@ -78,11 +84,55 @@ def create_room(args) -> None:
 
     if not args.name:
         raise Exception("The --name argument must be specified when creating a new room.")
-    profile = Profile.load_json_file(args, os.path.join(".", "resources", "profiles", args.profile + ".json"))
+    profile = Profile.load_json_file(os.path.join(".", "resources", "profiles", args.profile + ".json"))
     # TODO if room already exists in profile.rooms dont add it again
     profile.rooms.append(Room(name=args.name))
     profile.save()
     logger.info(f"Successfully created a new room: {args.name} and added it to the profile: {args.profile}")
+
+
+def delete_room(args) -> None:
+    """
+    Removes a room from a given profile using the room's name.
+    :param args:
+    :return:
+    """
+    if not args.profile:
+        raise Exception("You must specify the --profile option in order to delete a room to a specific profile.")
+
+    if not args.name:
+        raise Exception("The --name argument must be specified when deleting an existing room.")
+
+    profile = Profile.load_json_file(os.path.join(".", "resources", "profiles", args.profile + ".json"))
+    i = 0
+    for room in profile.rooms:
+        if room['_name'].lower() == args.name:
+            break
+        i += 1
+    del profile.rooms[i]
+    profile.save()
+
+
+def delete_group(args) -> None:
+    """
+    Removes a group from a given profile using the groups's name.
+    :param args:
+    :return:
+    """
+    if not args.profile:
+        raise Exception("You must specify the --profile option in order to delete a room to a specific profile.")
+
+    if not args.name:
+        raise Exception("The --name argument must be specified when deleting an existing room.")
+
+    profile = Profile.load_json_file(os.path.join(".", "resources", "profiles", args.profile + ".json"))
+    i = 0
+    for group in profile.groups:
+        if group['_name'].lower() == args.name:
+            break
+        i += 1
+    del profile.groups[i]
+    profile.save()
 
 
 def create_group(args) -> None:
@@ -96,12 +146,13 @@ def create_group(args) -> None:
 
     if not args.name:
         raise Exception("The --name argument must be specified when creating a new group.")
-    profile = Profile.load_json_file(args, os.path.join(".", "resources", "profiles", args.profile + ".json"))
+    profile = Profile.load_json_file(os.path.join(".", "resources", "profiles", args.profile + ".json"))
 
     # TODO if group already exists in profile.groups dont add it again
     profile.groups.append(Group(name=args.name))
     profile.save()
     logger.info(f"Successfully created a new group: {args.name} and added it to the profile: {args.profile}")
+
 
 if __name__ == "__main__":
     main()

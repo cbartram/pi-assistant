@@ -28,7 +28,7 @@ class Profile:
             logger.error(f"Failed to save profile to disk. Path = {path}. Error = {str(e)}")
 
     @staticmethod
-    def load_json_file(args, path: str):
+    def load_json_file(path: str):
         try:
             p = Profile()
             with open(path, 'r') as json_file:
