@@ -1,7 +1,8 @@
 import requests
 from pi_assistant.log import logger
-from pi_assistant.plugins.plugin import Plugin
+from pi_assistant.config import Configuration
 from pi_assistant.main import assistant_reply
+from pi_assistant.plugins.plugin import Plugin
 from pi_assistant.plugins.plugin_configuration import PluginConfiguration
 
 
@@ -10,8 +11,9 @@ class WeatherPlugin(Plugin):
     Uses the user's local position (city and region only) to determine
     the current weather forecast and temperature.
     """
-    def __init__(self):
-        self._config = None
+    def __init__(self, app_config: Configuration):
+        self._config = None  # This is plugin specific configuration like API keys or different URL's for dev/prod environments
+        self._app_config = app_config  # This is configuration for the whole application from the application.yml file
         self._city = None
         self._region = None
         self._current_temperature_f = None  # Temperature in farenheight
@@ -19,7 +21,7 @@ class WeatherPlugin(Plugin):
         self._forecast = None  # Cloudy, Rainy, Sunny
 
     def enabled(self) -> bool:
-        return False
+        return bool(self._app_config.get("plugins.weather.enabled"))
 
     def bind_to(self) -> str:
         return "wit$get_weather"

@@ -8,6 +8,9 @@ class CancelHandlerPlugin(Plugin):
     A default plugin which executes when no intents are known or if the user cancels a command by saying
     something like: "nevermind", "stop", or "goodbye"
     """
+    def enabled(self) -> bool:
+        return bool(self._app_config.get("plugins.date.enabled"))
+
     def bind_to(self) -> str:
         return "wit$cancel"
 

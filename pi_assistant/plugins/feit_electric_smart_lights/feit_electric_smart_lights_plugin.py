@@ -1,12 +1,17 @@
 import tinytuya
 from pi_assistant.log import logger
+from pi_assistant.config import Configuration
 from pi_assistant.plugins.plugin import Plugin
 from pi_assistant.plugins.plugin_configuration import PluginConfiguration
 
 
 class FeitElectricSmartLightsPlugin(Plugin):
-    def __init__(self):
+    def __init__(self, app_config: Configuration):
+        super().__init__(app_config)
         self._lights = []
+
+    def enabled(self) -> bool:
+        return bool(self._app_config.get("plugins.feit_electric_smart_lights.enabled"))
 
     def bind_to(self) -> str:
         return "feit_smart_lights"

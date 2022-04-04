@@ -1,5 +1,6 @@
-from pi_assistant.plugins.plugin_configuration import PluginConfiguration
 from abc import ABC, abstractmethod
+from pi_assistant.config import Configuration
+from pi_assistant.plugins.plugin_configuration import PluginConfiguration
 
 
 class Plugin(ABC):
@@ -7,6 +8,8 @@ class Plugin(ABC):
     Class which is inherited by every plugin and provides a unified way to implement IoT
     actions for a given intent.
     """
+    def __init__(self, app_config: Configuration):
+        self._app_config = app_config
 
     def name(self):
         """

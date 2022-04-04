@@ -3,6 +3,9 @@ from pi_assistant.plugins.plugin_configuration import PluginConfiguration
 
 
 class HueSmartLightsPlugin(Plugin):
+    def enabled(self) -> bool:
+        return bool(self._app_config.get("plugins.hue_smart_lights.enabled"))
+
     def bind_to(self) -> str:
         return "hue_smart_lights"
 

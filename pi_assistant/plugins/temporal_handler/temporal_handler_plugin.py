@@ -1,6 +1,6 @@
 from datetime import datetime
-from pi_assistant.plugins.plugin import Plugin
 from pi_assistant.main import assistant_reply
+from pi_assistant.plugins.plugin import Plugin
 from pi_assistant.plugins.plugin_configuration import PluginConfiguration
 
 
@@ -8,6 +8,9 @@ class TemporalHandlerPlugin(Plugin):
     """
     This plugin tells the user the current time in their timezone.
     """
+    def enabled(self) -> bool:
+        return bool(self._app_config.get("plugins.time.enabled"))
+
     def bind_to(self) -> str:
         return "time"
 

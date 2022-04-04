@@ -81,10 +81,6 @@ You can run this on any machine with a speaker and a microphone by using:
 export ENVIRONMENT=prod
 export WIT_ACCESS_TOKEN=<your wit.ai access token for your app>
 
-# This is only necessary if you plan to use the "weather" plugin/intent which is disabled by default
-export OPEN_WEATHER_API_KEY=<your openweathermap.com API key>
-
-
 python3 -m pi_assistant.main
 
 # Now use the configured keyword to invoke the assistant try:
@@ -107,11 +103,16 @@ wit:
     - "whatever_your_intent_is_called"
 ```
 
-The plugins currently added to this repository expect that within your [Wit.ai](https://wit.ai) account you have utterances and intents for:
+The default plugins which are enabled by default expect that within your [Wit.ai](https://wit.ai) account you have utterances for the following intents:
 
 - date
 - time
 - wit$cancel
+
+## Plugin Setup
+
+See [Individual plugin setup](./docs/plugins.md) for more information on 
+setting up and configuring each individual plugin like Philips Hue, Feit Electric, Weather, and more. 
 
 ## Running Unit Tests
 

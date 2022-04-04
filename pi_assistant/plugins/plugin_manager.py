@@ -26,7 +26,7 @@ class PluginManager:
         initialized_plugins = []
         for plugin in self._plugins:
             try:
-                p = plugin()
+                p = plugin(self._config)
 
                 # IMPORTANT: Plugin's name() method must return the same string case-sensitive as the module for which
                 # the plugin is enclosed. self._configs is keyed by the module's name NOT the plugin's name() method. If
@@ -38,7 +38,7 @@ class PluginManager:
                 else:
                     logger.info(f"The plugin: {p.name()} is disabled skipping initialization.")
             except Exception as e:
-                logger.error()
+                logger.error(f"Exception thrown while attempting to initialize the plugins. Error = {str(e)}")
 
         self._initialized_plugins = initialized_plugins
 

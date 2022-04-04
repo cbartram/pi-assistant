@@ -16,3 +16,18 @@ wit:
     - "wit$cancel"
     - "wit$get_weather"
     - "feit_smart_lights"
+
+
+plugins:
+  weather:
+    enabled: false
+  time:
+    enabled: true
+  hue_smart_lights:
+    enabled: true
+  feit_electric_smart_lights:
+    enabled: true
+  date:
+    enabled: true
+  cancel:
+    enabled: true
