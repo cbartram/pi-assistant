@@ -79,7 +79,8 @@ def test_plugin_manager_handle_intent_success(side_effect, assistant_reply, mock
             # It will execute the time intent because it has the highest confidence
             {'id': '5013819665334140', 'name': 'time', 'confidence': 0.9933},
             {'id': '5013819665334140', 'name': 'date', 'confidence': 0.9831}
-        ]
+        ],
+        'entities': []
     }
 
     plugin = plugin_manger.handle_intent(intents)
