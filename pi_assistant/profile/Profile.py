@@ -1,6 +1,5 @@
 import json
 import os.path
-from collections import namedtuple
 from pi_assistant.log import logger
 from pi_assistant.profile.Room import Room
 from pi_assistant.profile.Group import Group
@@ -34,7 +33,14 @@ class Profile:
             with open(path, 'r') as json_file:
                 data = json.loads(json_file.read())
                 for k, v in data.items():
-                    setattr(p, k, v)
+                    if k == 'room':
+                        r = Room(name=v['name'], devices=v['devices'])
+                        p.rooms.append(r)
+                    if k == 'group':
+                        g = Group(name=v['name'], devices=v['devices'])
+                        p.groups.append(g)
+                    else:
+                        setattr(p, k, v)
             return p
         except Exception as e:
             logger.error(f"Failed to load json profile from the path: {path}. Ensure the path is valid and points to a "

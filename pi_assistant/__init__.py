@@ -19,8 +19,8 @@ def main():
     pos_arg_choice_map = {
         "app:start": run,
         "profile:create": create_profile,
-        "profile:update": "",
-        "profile:delete": "",
+        "profile:update": "", # TODO
+        "profile:delete": delete_profile,
         "room:create": create_room,
         "room:delete": delete_room,
         "group:create": create_group,
@@ -73,6 +73,17 @@ def create_profile(args) -> None:
     logger.info(f"Successfully created the new profile: {args.name}!")
 
 
+def delete_profile(args):
+    """
+    Deletes a profile from the application.
+    :param args:
+    :return:
+    """
+    if not args.name:
+        raise Exception("The --name argument must be specified when deleting an existing profile.")
+    os.unlink(os.path.join(".", "resources", "profiles", args.name + ".json"))
+
+
 def create_room(args) -> None:
     """
     Creates a new room and adds it to the specified profile.
@@ -105,8 +116,9 @@ def delete_room(args) -> None:
 
     profile = Profile.load_json_file(os.path.join(".", "resources", "profiles", args.profile + ".json"))
     i = 0
+    print(profile.rooms)
     for room in profile.rooms:
-        if room['_name'].lower() == args.name:
+        if room['name'].lower() == args.name:
             break
         i += 1
     del profile.rooms[i]
@@ -120,15 +132,15 @@ def delete_group(args) -> None:
     :return:
     """
     if not args.profile:
-        raise Exception("You must specify the --profile option in order to delete a room to a specific profile.")
+        raise Exception("You must specify the --profile option in order to delete a group to a specific profile.")
 
     if not args.name:
-        raise Exception("The --name argument must be specified when deleting an existing room.")
+        raise Exception("The --name argument must be specified when deleting an existing group.")
 
     profile = Profile.load_json_file(os.path.join(".", "resources", "profiles", args.profile + ".json"))
     i = 0
     for group in profile.groups:
-        if group['_name'].lower() == args.name:
+        if group['name'].lower() == args.name:
             break
         i += 1
     del profile.groups[i]
