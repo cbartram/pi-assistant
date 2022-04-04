@@ -1,6 +1,6 @@
 from datetime import datetime
 from pi_assistant.plugins.plugin import Plugin
-from pi_assistant.main import assistant_reply
+from pi_assistant.util import assistant_reply
 from pi_assistant.plugins.plugin_configuration import PluginConfiguration
 
 

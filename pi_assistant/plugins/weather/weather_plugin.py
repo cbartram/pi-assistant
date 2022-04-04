@@ -1,7 +1,7 @@
 import requests
 from pi_assistant.log import logger
 from pi_assistant.config import Configuration
-from pi_assistant.main import assistant_reply
+from pi_assistant.util import assistant_reply
 from pi_assistant.plugins.plugin import Plugin
 from pi_assistant.plugins.plugin_configuration import PluginConfiguration
 

@@ -1,0 +1,31 @@
+{
+    "name": "Apartment",
+    "rooms": [
+        {
+            "_name": "Kitchen",
+            "_devices": []
+        },
+        {
+            "_name": "living_room",
+            "_devices": []
+        },
+        {
+            "_name": "bathroom",
+            "_devices": []
+        },
+        {
+            "_name": "master_bedroom",
+            "_devices": []
+        },
+        {
+            "_name": "office",
+            "_devices": []
+        }
+    ],
+    "groups": [
+        {
+            "_name": "living_room_speakers",
+            "_devices": []
+        }
+    ]
+}
