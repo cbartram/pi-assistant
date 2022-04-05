@@ -1,8 +1,7 @@
 import json
 import os.path
+from collections import defaultdict
 from pi_assistant.log import logger
-from pi_assistant.profile.Room import Room
-from pi_assistant.profile.Group import Group
 
 
 class Profile:
@@ -14,8 +13,8 @@ class Profile:
     def __init__(self):
         super().__init__()
         self.name = None
-        self.rooms = []
-        self.groups = []
+        self.rooms = defaultdict(list)
+        self.groups = defaultdict(list)
 
     def save(self):
         path = os.path.join(".", "resources", "profiles", self.name + ".json")
@@ -33,14 +32,7 @@ class Profile:
             with open(path, 'r') as json_file:
                 data = json.loads(json_file.read())
                 for k, v in data.items():
-                    if k == 'room':
-                        r = Room(name=v['name'], devices=v['devices'])
-                        p.rooms.append(r)
-                    if k == 'group':
-                        g = Group(name=v['name'], devices=v['devices'])
-                        p.groups.append(g)
-                    else:
-                        setattr(p, k, v)
+                    setattr(p, k, v)
             return p
         except Exception as e:
             logger.error(f"Failed to load json profile from the path: {path}. Ensure the path is valid and points to a "

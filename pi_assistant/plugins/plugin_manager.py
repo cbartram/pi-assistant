@@ -16,7 +16,7 @@ class PluginManager:
         self._plugins = []
         self._configs = {}  # The configuration for each respective plugin
         self._initialized_plugins = []
-        self._global_devices = []
+        self._global_devices = {}
         self._config = config
 
     def init_plugins(self, profile: Profile):
@@ -48,7 +48,7 @@ class PluginManager:
                             devices = p.get_devices()
                             logger.info(f"Found {len(devices)} IoT devices that the plugin: {p.name()} "
                                         f"is able to interact with.")
-                            self._global_devices.append(devices)
+                            self._global_devices[p.name()] = devices
 
                     initialized_plugins.append(p)
                 else:
