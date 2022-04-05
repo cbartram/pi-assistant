@@ -6,6 +6,9 @@ class HueSmartLightsPlugin(Plugin):
     def enabled(self) -> bool:
         return bool(self._app_config.get("plugins.hue_smart_lights.enabled"))
 
+    def get_devices(self) -> list:
+        return []
+
     def bind_to(self) -> str:
         return "hue_smart_lights"
 

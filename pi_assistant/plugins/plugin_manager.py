@@ -1,8 +1,10 @@
 import os
+import json
 import pi_assistant.plugins.plugin
 from pi_assistant.log import logger
 from pi_assistant.config import Configuration
 from pi_assistant.util import sanitize_plugin_class_name
+from pi_assistant.profile.Profile import Profile
 
 
 class PluginManager:
@@ -14,19 +16,20 @@ class PluginManager:
         self._plugins = []
         self._configs = {}  # The configuration for each respective plugin
         self._initialized_plugins = []
+        self._global_devices = []
         self._config = config
 
-    def init_plugins(self):
+    def init_plugins(self, profile: Profile):
         """
         Initializes each plugin class and calls the "init" method of each plugin
         :return:
         """
         self._plugins = PluginManager.load_plugins()
-        self._configs = PluginManager.load_config()
+        self._configs = PluginManager.load_config()  # Plugin level configuration i.e. weather_config.py
         initialized_plugins = []
         for plugin in self._plugins:
             try:
-                p = plugin(self._config)
+                p = plugin(self._config, profile)  # This self._config refers to application level config i.e. application.yml
 
                 # IMPORTANT: Plugin's name() method must return the same string case-sensitive as the module for which
                 # the plugin is enclosed. self._configs is keyed by the module's name NOT the plugin's name() method. If
@@ -34,12 +37,27 @@ class PluginManager:
                 if p.enabled():
                     if p.name() in self._configs:
                         p.init(config=self._configs[p.name()]())
+
+                        # Some plugins interact with physical devices and the plugin manager needs to know about what
+                        # devices the plugin interacts with. i.e Philips hue can interact with 1...N light bulbs while
+                        # Roomba may simply interact with 1 vacuum cleaner. Users can use the CLI to link devices to
+                        # specific rooms however, the plugin manager needs to maintain a global list of available
+                        # devices to link.
+                        if self._config.get(f"plugins.{p.name()}.physical_device") is True:
+                            logger.info(f"The plugin has defined physical devices it uses: {p.name()}")
+                            devices = p.get_devices()
+                            logger.info(f"Found {len(devices)} IoT devices that the plugin: {p.name()} "
+                                        f"is able to interact with.")
+                            self._global_devices.append(devices)
+
                     initialized_plugins.append(p)
                 else:
                     logger.info(f"The plugin: {p.name()} is disabled skipping initialization.")
             except Exception as e:
                 logger.error(f"Exception thrown while attempting to initialize the plugins. Error = {str(e)}")
+                raise e
 
+        self.__save_devices()
         self._initialized_plugins = initialized_plugins
 
     def get_bound_plugin_for(self, intent: str) -> pi_assistant.plugins.plugin.Plugin:
@@ -122,6 +140,19 @@ class PluginManager:
         logger.debug(f"Configuration object keys: {configs.keys()}")
         return configs
 
+    def __save_devices(self):
+        """
+        Saves all the plugin defined devices to a top level file in the resources directory
+        :return:
+        """
+        path = os.path.join(".", "resources", "devices.json")
+        try:
+            with open(path, 'w') as devices_file:
+                devices_file.write(json.dumps(self._global_devices, indent=4, default=lambda o: o.__dict__))
+        except Exception as e:
+            logger.error(f"Failed to save devices.json to path: {path}. Linking devices to rooms/groups will not work"
+                         f"until this is resolved. Error = {str(e)}")
+
     @property
     def plugins(self) -> list:
         return self._plugins
@@ -129,3 +160,7 @@ class PluginManager:
     @property
     def configs(self):
         return self._configs
+
+    @property
+    def devices(self):
+        return self._global_devices

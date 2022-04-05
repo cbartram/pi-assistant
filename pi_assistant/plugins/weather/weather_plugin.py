@@ -11,15 +11,6 @@ class WeatherPlugin(Plugin):
     Uses the user's local position (city and region only) to determine
     the current weather forecast and temperature.
     """
-    def __init__(self, app_config: Configuration):
-        self._config = None  # This is plugin specific configuration like API keys or different URL's for dev/prod environments
-        self._app_config = app_config  # This is configuration for the whole application from the application.yml file
-        self._city = None
-        self._region = None
-        self._current_temperature_f = None  # Temperature in farenheight
-        self._feels_like_temperature_f = None
-        self._forecast = None  # Cloudy, Rainy, Sunny
-
     def enabled(self) -> bool:
         return bool(self._app_config.get("plugins.weather.enabled"))
 
@@ -27,6 +18,11 @@ class WeatherPlugin(Plugin):
         return "wit$get_weather"
 
     def init(self, config: PluginConfiguration = None) -> None:
+        self._city = None
+        self._region = None
+        self._current_temperature_f = None  # Temperature in farenheight
+        self._feels_like_temperature_f = None
+        self._forecast = None  # Cloudy, Rainy, Sunny
         self._config = config
         self._city, self._region = self.get_location()
         self._forecast, self._current_temperature_f, self._feels_like_temperature_f = \

@@ -1,22 +1,27 @@
 import tinytuya
 from pi_assistant.log import logger
-from pi_assistant.config import Configuration
 from pi_assistant.plugins.plugin import Plugin
 from pi_assistant.plugins.plugin_configuration import PluginConfiguration
+from pi_assistant.profile.Device import Device
 
 
 class FeitElectricSmartLightsPlugin(Plugin):
-    def __init__(self, app_config: Configuration):
-        super().__init__(app_config)
-        self._lights = []
-
     def enabled(self) -> bool:
         return bool(self._app_config.get("plugins.feit_electric_smart_lights.enabled"))
 
     def bind_to(self) -> str:
         return "feit_smart_lights"
 
+    def get_devices(self) -> list:
+        devices = []
+        # This is always called after init() and thus it is safe to use init() set properties
+        for device in self._config.devices:
+            devices.append(Device(name=device['name'], metadata=device))
+        return devices
+
     def init(self, config: PluginConfiguration = None) -> None:
+        self._lights = []
+        self._config = config
         logger.info(f"Found {len(config.devices)} Feit bulbs on the network")
         for device in config.devices:
             light = tinytuya.BulbDevice(device['id'], device['ip'], device['key'])

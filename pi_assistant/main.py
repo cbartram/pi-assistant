@@ -24,7 +24,7 @@ def start_assistant(profile: Profile) -> None:
         s.bind(("127.0.0.1", 65432))
         s.listen()
         logger.info(f"Initializing plugins.")
-        plugin_manager.init_plugins()
+        plugin_manager.init_plugins(profile)
         recognizer.listen_in_background(source, callback)
         logger.info("Listening for input keywords...")
         assistant_reply("I am ready to help!")

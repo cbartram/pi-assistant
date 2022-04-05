@@ -14,7 +14,7 @@ class FeitElectricSmartLightsConfig(PluginConfiguration):
         # the network takes a really long time
         devices_file_path = os.path.join(".", "pi_assistant", "plugins", "feit_electric_smart_lights", "devices.json")
         if os.path.exists(devices_file_path):
-            logger.info("Loading existing devices from cached json file.")
+            logger.info("Loading existing Feit devices from cached json file.")
             with open(devices_file_path, 'r') as devices_json:
                 devices = json.loads(devices_json.read())
                 self._devices = FeitElectricSmartLightsConfig.parse_device_data(devices)

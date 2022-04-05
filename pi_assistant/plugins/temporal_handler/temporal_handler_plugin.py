@@ -9,7 +9,7 @@ class TemporalHandlerPlugin(Plugin):
     This plugin tells the user the current time in their timezone.
     """
     def enabled(self) -> bool:
-        return bool(self._app_config.get("plugins.time.enabled"))
+        return bool(self._app_config.get("plugins.temporal_handler.enabled"))
 
     def bind_to(self) -> str:
         return "time"

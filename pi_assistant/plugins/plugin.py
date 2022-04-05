@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from pi_assistant.config import Configuration
+from pi_assistant.profile.Profile import Profile
 from pi_assistant.plugins.plugin_configuration import PluginConfiguration
 
 
@@ -8,8 +9,9 @@ class Plugin(ABC):
     Class which is inherited by every plugin and provides a unified way to implement IoT
     actions for a given intent.
     """
-    def __init__(self, app_config: Configuration):
+    def __init__(self, app_config: Configuration, profile: Profile):
         self._app_config = app_config
+        self._profile = profile
 
     def name(self):
         """
@@ -18,6 +20,16 @@ class Plugin(ABC):
         :return:
         """
         return self.__module__.split(".")[-2]
+
+    def get_devices(self) -> list:
+        """
+        Returns a list of available devices the extending plugin is able to interact with. The list will be of type:
+        "Device" objects. Not all plugins interact with physical devices and as such this method is not abstract.
+        Plugins do not have to implement this method unless they interact with IoT devices like light bulbs, plugs,
+        vacuum cleaners, door locks, cameras etc...
+        :return: List of device objects the plugin has access to.
+        """
+        return []
 
     def enabled(self) -> bool:
         """

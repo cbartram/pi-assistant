@@ -21,13 +21,19 @@ wit:
 plugins:
   weather:
     enabled: false
-  time:
+    physical_device: false # Defines if this plugin uses or interacts with physical IoT devices.
+  temporal_handler:
     enabled: true
+    physical_device: false
   hue_smart_lights:
     enabled: true
+    physical_device: true
   feit_electric_smart_lights:
     enabled: true
-  date:
+    physical_device: true
+  date_handler:
     enabled: true
-  cancel:
+    physical_device: false
+  cancel_handler:
     enabled: true
+    physical_device: false

@@ -9,7 +9,7 @@ class CancelHandlerPlugin(Plugin):
     something like: "nevermind", "stop", or "goodbye"
     """
     def enabled(self) -> bool:
-        return bool(self._app_config.get("plugins.date.enabled"))
+        return bool(self._app_config.get("plugins.cancel_handler.enabled"))
 
     def bind_to(self) -> str:
         return "wit$cancel"
