@@ -29,7 +29,8 @@ class PluginManager:
         initialized_plugins = []
         for plugin in self._plugins:
             try:
-                p = plugin(self._config, profile)  # This self._config refers to application level config i.e. application.yml
+                # This self._config refers to application level config i.e. application.yml
+                p = plugin(self._config, profile)
 
                 # IMPORTANT: Plugin's name() method must return the same string case-sensitive as the module for which
                 # the plugin is enclosed. self._configs is keyed by the module's name NOT the plugin's name() method. If
@@ -60,7 +61,7 @@ class PluginManager:
         self.__save_devices()
         self._initialized_plugins = initialized_plugins
 
-    def get_bound_plugin_for(self, intent: str) -> pi_assistant.plugins.plugin.Plugin:
+    def get_bound_plugin_for(self, intent: str) -> list:
         """
         Returns a plugin object which is bound to the respective Wit intent passed in as a parameter
         :param intent: String the wit intent to find a plugin for
@@ -69,12 +70,16 @@ class PluginManager:
         if intent.lower() not in self._config.get("wit.intents"):
             raise KeyError(f'The intent specified: {intent} is not a known intent: {self._config.get("wit.intents")}')
 
+        # We can return more than one plugin which can satisfy an intent. i.e Philips hue, Feit electric, and LifX
+        # can all satisfy the smart_lights intent. Additional logic implemented by the plugin manager will use the
+        # User's profile to determine which (or a combination) of plugins to satify the intent.
+        bound_plugins = []
         logger.info(f"Looking for plugin bound to intent: {intent}")
         for plugin in self._initialized_plugins:
             logger.info(f"Plugin: {plugin.__class__} is bound to: {plugin.bind_to()}",)
             if plugin.bind_to() == intent:
-                return plugin
-        return None
+                bound_plugins.append(plugin)
+        return bound_plugins
 
     def handle_intent(self, wit_response: dict) -> pi_assistant.plugins.plugin.Plugin:
         """

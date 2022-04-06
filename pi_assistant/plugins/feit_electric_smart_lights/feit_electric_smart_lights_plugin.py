@@ -10,14 +10,7 @@ class FeitElectricSmartLightsPlugin(Plugin):
         return bool(self._app_config.get("plugins.feit_electric_smart_lights.enabled"))
 
     def bind_to(self) -> str:
-        return "feit_smart_lights"
-
-    def get_devices(self) -> list:
-        devices = []
-        # This is always called after init() and thus it is safe to use init() set properties
-        for device in self._config.devices:
-            devices.append(Device(name=device['name'], metadata=device))
-        return devices
+        return "smart_lights"
 
     def init(self, config: PluginConfiguration = None) -> None:
         self._lights = []
@@ -38,6 +31,13 @@ class FeitElectricSmartLightsPlugin(Plugin):
         else:
             for light in self._lights:
                 light.turn_off()
+
+    def get_devices(self) -> list:
+        devices = []
+        # This is always called after init() and thus it is safe to use init() set properties
+        for device in self._config.devices:
+            devices.append(Device(name=device['name'], bind_to=self.name(), metadata=device))
+        return devices
 
     def on_plugin_end(self) -> None:
         pass

@@ -37,6 +37,3 @@ class Profile:
         except Exception as e:
             logger.error(f"Failed to load json profile from the path: {path}. Ensure the path is valid and points to a "
                          f"json profile file. You can use profile:create to create a new profile. Error = {str(e)}")
-
-    def __str__(self):
-        return f"Profile(name='{self.name}', groups='{len(self.groups)}', rooms='{len(self.rooms)}')"
